@@ -1,0 +1,9 @@
+streamlit
+python-dotenv
+openai
+pyaudio
+wave
+google-generativeai
+black
+isort
+
