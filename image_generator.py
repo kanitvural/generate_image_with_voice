@@ -44,13 +44,11 @@ class ImageGenerator:
 
     def image_and_prompt_with_gemini(self, image_path, prompt):
         multimodality_prompt = f"""
-        I would like you to recreate the image I've provided, along with some additional instructions. 
-        First, describe the image in great detail. Then, I will use the final text you provide to generate a visual using an AI model. 
-        Keep in mind that the final version of your response will be used as a prompt for image generation.
-        Here's the additional instruction: {prompt}
+        Describe the image briefly, focusing only on the main elements and features.
+        Here's the additional instruction: {prompt[:400]}
         """
 
-        client = genai.GenerativeModel(model_name="gemini-pro-vision")
+        client = genai.GenerativeModel(model_name="gemini-1.5-pro-001")
         source_image = Image.open(image_path)
 
         AI_response = client.generate_content([multimodality_prompt, source_image])
