@@ -1,15 +1,14 @@
 import threading
-
 import streamlit as st
 
 from audio_transcriptor import AudioTranscriptor
 from image_generator import ImageGenerator
 from voice_recorder import VoiceRecorder
 
-if "recort_active" not in st.session_state:
+if "record_active" not in st.session_state:
     st.session_state.record_active = threading.Event()
     st.session_state.recording_status = "Ready!"
-    st.session_state.recording_complated = False
+    st.session_state.recording_completed = False
     st.session_state.latest_image = ""
     st.session_state.messages = []
     st.session_state.frames = []
@@ -19,7 +18,7 @@ def start_recording():
     st.session_state.record_active.set()  # start threading
     st.session_state.frames = []
     st.session_state.recording_status = "🔴 **Recording...**"
-    st.session_state.recording_complated = False
+    st.session_state.recording_completed = False
 
     threading.Thread(
         target=VoiceRecorder.record,
@@ -29,8 +28,8 @@ def start_recording():
 
 def stop_recording():
     st.session_state.record_active.clear()  # stop threading
-    st.session_state.recording_status = "✅ **Complated'**"
-    st.session_state.recording_complated = True
+    st.session_state.recording_status = "✅ **Completed**"
+    st.session_state.recording_completed = True
 
 
 st.set_page_config(
@@ -55,13 +54,18 @@ with col_audio:
         start_btn = st.button(
             label="Start",
             on_click=start_recording,
-            disabled=st.session_state.recording_active.is_set(),
+            disabled=st.session_state.record_active.is_set(),
         )
         stop_btn = st.button(
             label="Stop",
             on_click=stop_recording,
-            disabled=not st.session_state.recording_active.is_set(),
+            disabled=not st.session_state.record_active.is_set(),
         )
     with subcol_right:
-        st.empty()
-        
+        recorded_audio = st.empty()
+
+        if st.session_state.recording_completed:
+            recorded_audio.audio(data="voice_prompt.wav")
+            
+    st.divider()
+    latest_image = st.checkbox(label="Use last picture")
