@@ -36,7 +36,7 @@ st.set_page_config(
     page_title="Voice2Image", layout="wide", page_icon="./icons/icon.png"
 )
 
-st.image("./icons/banner.jpg", use_column_width=True)
+st.image("./icons/banner.jpg", use_container_width=True)
 st.title("Voice2Image: Generates image with your voice")
 st.divider()
 
